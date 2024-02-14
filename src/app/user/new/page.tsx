@@ -1,31 +1,15 @@
+'use client';
+
 import React from 'react';
-import { db } from '@/db';
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import * as actions from '@/actions';
+import { useFormState } from 'react-dom';
 
 export default function UserCreatePage() {
-  async function createUser(formData: FormData) {
-    // Create server action
-    'use server';
-
-    // Validate user input
-    const name = formData.get('name') as string;
-    const role = formData.get('role') as string;
-
-    // Create on the database
-    const user = await db.user.create({
-      data: {
-        name,
-        role,
-      },
-    });
-
-    // Redirect back to homepage
-    redirect('/');
-  }
+  const [formState, action] = useFormState(actions.createUser, { message: '' });
 
   return (
-    <form action={createUser}>
+    <form action={action}>
       <h3 className='font-bold'>Create User</h3>
       <div className='flex flex-col gap-2'>
         <div className='flex gap-2'>
@@ -36,6 +20,12 @@ export default function UserCreatePage() {
           <label htmlFor='role'>Role</label>
           <input name='role' className='border rounded p-2 w-full' />
         </div>
+
+        {formState.message ? (
+          <div className='my-2 p-2 bg-red-200 border rounded border-red-400'>
+            {formState.message}
+          </div>
+        ) : null}
         <div className='flex flex-row gap-2'>
           <Link
             href='/'
