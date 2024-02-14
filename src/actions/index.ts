@@ -2,6 +2,7 @@
 
 import { db } from '@/db';
 import { user } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function editUser(data: user) {
@@ -12,6 +13,7 @@ export async function editUser(data: user) {
     data: { name, role },
   });
 
+  revalidatePath(`/user/${id}`);
   redirect(`/user/${id}`);
 }
 

@@ -33,6 +33,9 @@ export default async function UserDetailsPage(props: UserDetailsPageProps) {
           <form action={deleteUserAction}>
             <button className='rounded border p-2'>Delete</button>
           </form>
+          <Link href={'/'} className='border rounded p-2'>
+            Back
+          </Link>
         </div>
       </div>
       <div className='flex flex-col gap-2'>
@@ -40,4 +43,14 @@ export default async function UserDetailsPage(props: UserDetailsPageProps) {
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  const users = await db.user.findMany();
+
+  return users.map((user) => {
+    return {
+      id: user.id.toString(),
+    };
+  });
 }
