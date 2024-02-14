@@ -1,6 +1,7 @@
 import { db } from '@/db';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import * as actions from '@/actions';
 
 interface UserDetailsPageProps {
   params: {
@@ -19,6 +20,8 @@ export default async function UserDetailsPage(props: UserDetailsPageProps) {
     return notFound();
   }
 
+  const deleteUserAction = actions.deleteUser.bind(null, user.id);
+
   return (
     <div className='flex flex-col'>
       <div className='flex flex-row justify-between'>
@@ -27,7 +30,9 @@ export default async function UserDetailsPage(props: UserDetailsPageProps) {
           <Link className='rounded border p-2' href={`/user/${user.id}/edit`}>
             Edit
           </Link>
-          <button className='rounded border p-2'>Delete</button>
+          <form action={deleteUserAction}>
+            <button className='rounded border p-2'>Delete</button>
+          </form>
         </div>
       </div>
       <div className='flex flex-col gap-2'>
